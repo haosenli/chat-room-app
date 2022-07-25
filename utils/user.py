@@ -1,24 +1,25 @@
 """This file contains the User class.
 """
+from socket import socket
 
 
 class User:
     """User provides a simple data structure to store user information.
     """
-    def __init__(self, username: str, ip: str) -> None:
+    def __init__(self, username: str, ip: str, connection: socket) -> None:
         """Constructs a User object from a username and ip.
         
         Args:
             username: A str username of a user.
             ip: A str ip address of a user.
+            conn: A socket connection of a user.
             
         Returns:
             None.
         """
         self.username = username
+        self.socket = connection
         self.ip = ip
-        # self.conn = conn
-        # self.addr = addr
         
     def __str__(self):
         """Returns a str representing the user.
@@ -74,3 +75,25 @@ class User:
             A str representing the ip address of a user.
         """
         return self.ip
+    
+    def set_socket(self, connection: socket) -> None:
+        """Sets the socket connection of the user.
+        
+        Args:
+            conn: A socket connection.
+            
+        Returns:
+            None.
+        """
+        self.socket = connection
+        
+    def get_socket(self):
+        """Gets the socket connection of the user.
+        
+        Args:
+            None.
+            
+        Returns:
+            A socket connection.
+        """
+        return self.socket

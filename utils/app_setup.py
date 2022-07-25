@@ -25,16 +25,24 @@ filepath = 'app_setup.pkl'
 
 # protocol setup
 protocol = {
-    'server': '', # server ip address
-    'local': True,
+    'server': '173.230.158.55', # server ip address
+    'local': False,
     'local_ip': '', # local server ip (i.e. 192.168.0...)
     'port': 5678, # port number
-    'header': 64, # header
+    'header': 256, # header
+    'max_recv': 4096,
     'format': 'utf-8', # encoding
     'keywords': { # keyword messages
-        'disconnect': '!exit'
+        'text': '#text',
+        'image': '#image',
+        'new_user': '#new_user',
+        'success': '#success',
+        'user_cred': '#user_cred',
+        'change_name': '#chng_name',
+        'conn_error': '#conn_error',
+        'disconnect': '#exit',
+        'banned': '#banned',
         }, 
-    'max_recv': 4096,
 }
 
 with open(filepath, 'wb') as f:

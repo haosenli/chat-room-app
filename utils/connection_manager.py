@@ -20,7 +20,9 @@ class ConnectionManager:
         self.read_instance()
     
     def add_user(self, user: User) -> None:
-        """Adds a User to server list.
+        """Adds a new User to server list.
+        
+        Does nothing if the user is already in server list.
         
         Args:
             user: A User object.
@@ -30,9 +32,20 @@ class ConnectionManager:
         """
         if user.get_ip() in self.all_users:
             return
-        self.online_users[user.get_ip()] = user
+        self.all_users[user.get_ip()] = user
+        
+    def get_user(self, ip: str) -> User:
+        """Returns a user object from a given IP address.
+        
+        Args:
+            ip: A str IP address.
+            
+        Returns:
+            A User associated with the IP.
+        """
+        return self.all_users[ip]
     
-    def online_user(self, ip: str) -> None:
+    def online_user(self, ip: str) -> User:
         """Adds User to both online users and all users.
         
         User must already exists in server list.
@@ -42,13 +55,15 @@ class ConnectionManager:
             ip: A str IP address.
             
         Returns:
-            None.
+            The associated User object.
         """
         # do nothing if user is banned
         if ip in self.banned_users:
             return
         if ip in self.all_users:
-            self.online_users[ip] = self.all_users[ip]
+            user = self.all_users[ip]
+            self.online_users[ip] = user
+            return user
 
     def offline_user(self, ip: str) -> None:
         """Moves user to offline.
@@ -61,6 +76,38 @@ class ConnectionManager:
         """
         if ip in self.online_users:
             self.online_users.pop(ip)
+            
+    def is_online(self, ip: str) -> bool:
+        """Checks if the IP address is online.
+        
+        Args:
+            ip: A str IP address.
+            
+        Returns:
+            A bool indicating user status.
+        """
+        return ip in self.online_users
+            
+    def non_senders(self, ip: str) -> list:
+        """Returns a list of online Users that
+        does not contain the given ip.
+        
+        Args:
+            ip: A str IP address.
+            
+        Returns:
+            A list of online User objects. An empty list
+            is returned if give ip is does not exist.
+        """
+        result = []
+        if ip not in self.online_users:
+            return result
+        for ip_key, user in self.online_users.items():
+            # skip user if ip matches
+            if ip_key == ip:
+                continue
+            result.append(user)
+        return result
     
     def contains_user(self, ip: str) -> int:
         """Checks if user exists.
