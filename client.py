@@ -73,7 +73,6 @@ def client_send(client: socket) -> None:
     """
     connected = True
     while connected:
-        print('here')
         msg = input()
         # disconnect message
         if msg == KEYWORDS['disconnect']:

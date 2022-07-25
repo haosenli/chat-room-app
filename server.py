@@ -56,14 +56,24 @@ def client_auth(conn: socket, ip: str) -> None:
             f'{user.get_username()} connected to the server!', 
             KEYWORDS['text'])
         
-def msg_all(user: User, content: Any, d_type: str):
+def msg_all(user: User, content: Any, d_type: str) -> None:
+    """Messages all users in the server chat room, except for the sender.
+    
+    Args:
+        user: A User representing the sender.
+        content: Any content the user is sending.
+        d_type: A str indicating the datatype of the content.
+        
+    Returns:
+        None.
+    """
     recipients = CONNECTIONS.non_senders(user.get_ip())
     print(f"[SENDING] Sending {user.get_username()}'s message to " +\
         f"{len(recipients)} other users.")
-    for user in recipients:
+    for recipient in recipients:
         data = f'{user.get_username()}: {content}'
-        dt.send_data(user.get_socket(), data, d_type)
-        print(f'   > Sent message to {user.get_username()}')
+        dt.send_data(recipient.get_socket(), data, d_type)
+        print(f'   > Sent message to {recipient.get_username()}')
 
 def handle_client(conn: socket, addr: str) -> None:
     """Handles client connections.
